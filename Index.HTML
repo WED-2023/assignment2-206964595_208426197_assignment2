@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Game Website</title>
+    <style>
+        /* CSS */
+        .screen {display:none}
+        .screen.active{display: block;}
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1>Space Invaders</h1>
+        
+    </header>
+
+    <!-- Navigation Menu -->
+    <nav>
+        <ul>
+            <li><a href="#" class="nav-link" data-screen="home">Home</a></li>
+            <li><a href="#" class="nav-link" data-screen="about">About</a></li>
+            <li id="settings-nav-item" style="display: none;"><a href="#" class="nav-link" data-screen="settings">Setting</a></li>
+            <li id="game-nav-item" style="display: none;"><a href="#" class="nav-link" data-screen="game">Game</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main>
+        <!--welcome screen-->
+        <div id="Welcome" class="screen">
+            <h2>Welcome to our Game</h2>
+            
+            <!--picture here-->
+            <div class="game-image">
+                <!-- Image placeholder -->
+            </div>
+            
+            <div class="creators-info">
+                <p><b>Game creators:</b></p>
+                <p>Yuval Ellins -</p>
+                <p>Idan Duhaviv - 208426197</p>
+            </div>
+            
+            <div class="welcome-buttons">
+                <button id="login-button" class="action-button">Login</button>
+                <button id="register-button" class="action-button">Register</button>
+            </div>
+        </div>
+
+            <!-- registration screen -->
+
+        <div id="register-screen" class ="screen">
+            <h2>Registration</h2>
+            <form id="reg-form">
+                <div class = "form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class ="form-group">
+                    <label for="passowrd">Password:</label>
+                    <input type="password" id="password" name="password"  required>
+                    <br>
+                    <small class="password-hint">Must include at least 1 number and letter, minimum 8 characters long</small>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword"  required>
+                </div>
+                <div class="form-group">
+                    <label for="firstName">First name</label>
+                    <input type ="text" id="firstName" name="firstName"  required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Laste name</label>
+                    <input type ="text" id="lastName" name="lastName"  required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type ="text" id="email" name="email"  required>
+                </div>
+
+                <div class="form-group">
+                    <label for="birthDay">Date of Birth</label>
+                    <input type ="date" id="birthDay" name="birthDay" placeholder="DD-MM-YYYY" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" id="registerSubmit">Register</button>
+                </div>
+            </form>
+        
+
+
+
+
+        </div>
+
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen">
+            <h2>Login</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username-login">Username:</label>
+                    <input type="text" id="username-login" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password-login">Password:</label>
+                    <input type="password" id="password-login" name="password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+    
+        <!-- Settings screen (only accessible after login) -->
+<div id="settings" class="screen">
+    <h2>Game Settings</h2>
+    <div class="settings-container">
+        <div class="setting-group">
+            <h3>Controls</h3>
+            <div class="form-group">
+                <label for="firing-key">Firing Key:</label>
+                <input type="text" id="firing-key" maxlength="1" value="Space" readonly>
+                <button id="change-key-btn">Change Key</button>
+                <p class="key-instructions">Click "Change Key" then press your desired key</p>
+            </div>
+        </div>
+
+        <div class="setting-group">
+            <h3>Game Duration</h3>
+            <div class="form-group">
+                <label for="game-time">Game Time (minutes):</label>
+                <input type="number" id="game-time" min="2" value="2">
+                <span class="setting-hint">Minimum: 2 minutes</span>
+            </div>
+        </div>
+
+        <div class="setting-group">
+            <h3>Appearance</h3>
+            <div class="form-group">
+                <label for="player-color">Player Ship Color:</label>
+                <input type="color" id="player-color" value="#00FF00">
+            </div>
+            <div class="form-group">
+                <label for="enemy-color">Enemy Ship Color:</label>
+                <input type="color" id="enemy-color" value="#FF0000">
+            </div>
+            <div class="form-group">
+                <label for="brightness">Brightness:</label>
+                <input type="range" id="brightness" min="50" max="150" value="100">
+                <span id="brightness-value">100%</span>
+            </div>
+        </div>
+
+        <div class="settings-buttons">
+            <button id="start-game" class="action-button">Start Game</button>
+            <button id="reset-settings" class="secondary-button">Reset Settings</button>
+        </div>
+        </div>
+    </div>
+
+
+        <!-- Game Screen (only accessible after login) -->
+        <div id="game-screen" class="screen">
+            <h2>Game Area</h2>
+            <div id="game-container">
+                <!-- Game canvas or elements will go here -->
+            </div>
+        </div>
+
+        <!-- About Screen -->
+        <dialog id="about-dialog" class="modal">
+            <div class="modal-content">
+                <button id="close-about">X</button>
+
+                <h2>About the Game</h2>
+                <p>Made by BGU - SISE students Yuval and Idan</p>
+                <p>future Tim and TIg = entrer the difficulties in here</p>
+                <p> enter instruction, timer (stops the game i guess when we open it)</p>
+                <p> game features like different shots</p>
+                <p>This version was created as an educational project.</p>
+                <p>Game controls:</p>
+                <ul>
+                    <li>Left/Right Arrow Keys: Move spaceship</li>
+                    <li>Space Bar: Shoot</li>
+                </ul>
+            </div>
+        </dialog>
+
+        <!-- Add more screens as needed -->
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2025 My Game Website. All rights reserved.</p>
+        <p>Created for educational purposes</p>
+    </footer>
+
+    <script>
+    // JavaScript will go here
+
+        // araay of users
+        let users = [
+        {username:'p', password:'testuser', firstName:'testName', lastName:'testLastN',email:'deezN@gmail.com', birthDay:'1999-09-09'}
+    ];
+    let isLogged = false // login boolian
+    let currentUser = null //who's connected a.t.m        
+    let activeScreen = null; //keeps track for current active screen
+
+        function showScreen(screenID) {
+    console.log("Attempting to show screen:", screenID);
+    
+    if (activeScreen) {
+        console.log("Removing active class from:", activeScreen.id);
+        activeScreen.classList.remove('active');
+    } else {
+        console.log("No active screen to remove class from");
+    }
+    
+    const targetScreen = document.getElementById(screenID);
+    console.log("Found target screen:", targetScreen);
+    
+    if (targetScreen) {
+        console.log("Adding active class to:", screenID);
+        targetScreen.classList.add('active');
+        activeScreen = targetScreen;
+    } else {
+        console.log("ERROR: Target screen not found:", screenID);
+    }
+}
+   
+  
+    document.addEventListener('DOMContentLoaded',function(){
+    activeScreen = document.getElementById('Welcome')
+    activeScreen.classList.add('active');
+      //navigation bar
+      const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default anchor behavior
+        
+        const screenId = this.getAttribute('data-screen');
+        
+        // Handle special case for game screen (requires login)
+        if (screenId === 'game' && !isLogged) {
+            alert('Please log in to access the game');
+            showScreen('login-screen');
+        } else if (screenId === 'home') {
+            // For 'home' data-screen attribute, show Welcome screen
+            showScreen('Welcome');
+        } else if (screenId==='about'){
+            document.getElementById('about-dialog').showModal();
+        } else {
+            // For other screens, use the data-screen attribute with '-screen' suffix
+            showScreen(screenId + '-screen');
+        }
+    });
+});
+
+
+
+    const loginButton = document.getElementById('login-button');
+    const registerButton = document.getElementById('register-button');
+
+    if(registerButton) {
+        registerButton.addEventListener('click',function(){
+            showScreen('register-screen');});
+        }
+
+    if(loginButton){
+        loginButton.addEventListener('click',function(){
+            showScreen('login-screen');});
+    }
+    
+
+    const registerForm = document.getElementById('reg-form');
+    if (registerForm){
+        registerForm.addEventListener('submit',function(e){
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const Bday = document.getElementById('birthDay').value;
+            
+            //check password
+
+            let validPass = false;
+            let passLen = false;
+            let passCharBool = false;
+            let passIntBool = false;
+            if(password.length>=8){
+                passLen = true;
+            }else{
+                alert('Password minimum length is 8 digits')
+                return;
+            }
+            for(let i=0; i<password.length; i++){
+                const char = password[i]
+                if(/[a-zA-Z]/.test(char)){
+                    passCharBool = true;
+
+                }else if(/[0-9]/.test(char)){
+                    passIntBool = true;
+                }
+            }
+            
+            if(passCharBool&&passIntBool){
+                validPass = true;
+            } else{
+                alert('Password must contain 1 digit and one letter atleaset');
+            }
+
+            //finish chekcing password integrity
+
+            //check if passwords match
+            let equalPasswords = false;
+            
+            if(password === confirmPassword){
+                equalPasswords = true;
+            } else{
+                alert('Passwords do not match');
+                return;
+            }
+
+            //check if email is valid
+            let validEmail = false;
+            const emailPattern =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if(emailPattern.test(email)){
+                validEmail =true
+            }else{
+                alert('invalid email');
+                return;
+            }
+
+            //check if username already exits
+
+            if(users.some(u=>u.username===username)) {
+                alert('Username already exsits!');
+                return;
+            }
+
+            //all valid! lets add the user to the array.
+
+            const NewUser ={
+                username:username, password: password,
+                firstName: firstName, lastName: lastName,
+                email: email, birthDay: Bday
+            };
+
+            users.push(NewUser);
+            alert('Registration succesfull! Please log in commander');
+            showScreen('login-screen');
+        
+        });
+
+        
+
+    }
+            
+            // Handle login form submission
+            const loginForm = document.getElementById('login-form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    console.log("Login form submitted");
+                    
+                    const username = document.getElementById('username-login').value;
+                    const password = document.getElementById('password-login').value;
+                    
+                    const user = users.find(u => u.username === username && u.password === password);
+                    if (user) {
+                        isLogged = true; //now the user is logged
+                        currentUser = user;
+                        
+                        // make the game screen available in the nav bar
+                        document.getElementById('game-nav-item').style.display = 'inline-block';
+                        document.getElementById('settings-nav-item').style.display = 'inline-block';
+
+
+                        
+                        // open game screen
+                        showScreen('settings');
+                    } else {
+                        alert("Invalid username or password");
+                    }
+                    
+    });
+}           
+
+
+            const firingKeyInput = document.getElementById('firing-key');
+            const changeKeyBtn = document.getElementById('change-key-btn');
+            const gameTimeInput = document.getElementById('game-time');
+            const playerColorInput = document.getElementById('player-color');
+            const enemyColorInput = document.getElementById('enemy-color');
+            const brightnessInput = document.getElementById('brightness');
+            const brightnessValue = document.getElementById('brightness-value');
+            const startGameBtn = document.getElementById('start-game');
+            const resetSettingsBtn = document.getElementById('reset-settings');
+
+            // Default settings
+            const defaultSettings = {
+                firingKey: ' ', // Space
+                firingKeyDisplay: 'Space',
+                gameTime: 2,
+                playerColor: '#00FF00',
+                enemyColor: '#FF0000',
+                brightness: 100
+            };
+
+            // Current settings
+            let gameSettings = {...defaultSettings};
+
+            // Change firing key functionality
+            if (changeKeyBtn) {
+                changeKeyBtn.addEventListener('click', function() {
+                    firingKeyInput.value = 'Press any key...';
+                    firingKeyInput.classList.add('listening');
+                    
+                    // One-time event listener for the next keypress
+                    const keyListener = function(e) {
+                        e.preventDefault();
+                        let keyName = e.key;
+                        let displayName = keyName;
+                        
+                        // Handle special keys
+                        if (keyName === ' ') {
+                            displayName = 'Space';
+                        } else if (keyName === 'ArrowLeft') {
+                            displayName = '←';
+                        } else if (keyName === 'ArrowRight') {
+                            displayName = '→';
+                        } else if (keyName === 'ArrowUp') {
+                            displayName = '↑';
+                        } else if (keyName === 'ArrowDown') {
+                            displayName = '↓';
+                        }
+                        
+                        // Update the input and settings
+                        firingKeyInput.value = displayName;
+                        gameSettings.firingKey = keyName;
+                        gameSettings.firingKeyDisplay = displayName;
+                        
+                        // Remove the listening class and this event listener
+                        firingKeyInput.classList.remove('listening');
+                        document.removeEventListener('keydown', keyListener);
+                    };
+                    
+                    document.addEventListener('keydown', keyListener);
+                });
+            }
+
+            // Update brightness display
+            if (brightnessInput) {
+                brightnessInput.addEventListener('input', function() {
+                    brightnessValue.textContent = this.value + '%';
+                    gameSettings.brightness = parseInt(this.value);
+                });
+            }
+
+            // Update game time
+            if (gameTimeInput) {
+                gameTimeInput.addEventListener('change', function() {
+                    // Ensure minimum value
+                    if (this.value < 2) {
+                        this.value = 2;
+                    }
+                    gameSettings.gameTime = parseInt(this.value);
+                });
+            }
+
+            // Update colors
+            if (playerColorInput) {
+                playerColorInput.addEventListener('change', function() {
+                    gameSettings.playerColor = this.value;
+                });
+            }
+
+            if (enemyColorInput) {
+                enemyColorInput.addEventListener('change', function() {
+                    gameSettings.enemyColor = this.value;
+                });
+            }
+
+            // Reset settings
+            if (resetSettingsBtn) {
+                resetSettingsBtn.addEventListener('click', function() {
+                    // Reset to defaults
+                    gameSettings = {...defaultSettings};
+                    
+                    // Update UI
+                    firingKeyInput.value = gameSettings.firingKeyDisplay;
+                    gameTimeInput.value = gameSettings.gameTime;
+                    playerColorInput.value = gameSettings.playerColor;
+                    enemyColorInput.value = gameSettings.enemyColor;
+                    brightnessInput.value = gameSettings.brightness;
+                    brightnessValue.textContent = gameSettings.brightness + '%';
+                });
+            }
+
+            // Start game
+            if (startGameBtn) {
+                startGameBtn.addEventListener('click', function() {
+                    // Save settings and show game screen
+                    console.log('Starting game with settings:', gameSettings);
+                    showScreen('game-screen');
+                    
+                    // Here you would initialize your game with the chosen settings
+                });
+            }
+const aboutDialog = document.getElementById('about-dialog');
+const closeAboutBtn = document.getElementById('close-about');
+
+    // close button event listener
+    if (closeAboutBtn) {
+        closeAboutBtn.addEventListener('click', function() {
+            aboutDialog.close();
+        });
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && aboutDialog.open) {
+            aboutDialog.close();
+        }
+    });
+
+    // Close when clicking outside the dialog
+    aboutDialog.addEventListener('click', function(e) {
+        
+        const dialogDimensions = aboutDialog.getBoundingClientRect();
+        if (
+            e.clientX < dialogDimensions.left ||
+            e.clientX > dialogDimensions.right ||
+            e.clientY < dialogDimensions.top ||
+            e.clientY > dialogDimensions.bottom
+        ) {
+            aboutDialog.close();
+        }
+    });
+    
+}); // Closing bracket for DOMContentLoaded
+
+  
+
+
+    </script>
+</body>
+</html>`    
