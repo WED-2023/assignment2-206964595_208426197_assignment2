@@ -72,24 +72,14 @@ Default controls (can be customized in Settings):
 - **Move Down**: Down Arrow
 - **Fire**: Space
 
-## Development Notes
 
 ### Browser Compatibility
-- Tested on Chrome 90+, Firefox 88+, and Edge 90+
-- Uses modern CSS features including animations, flexbox, and grid
-- Uses local storage for persistence
+- Chrome only
 
 ### Performance Considerations
 - Enemy and shot movements are optimized using requestAnimationFrame
 - Object creation/destruction minimized during gameplay
 - Audio preloading to prevent playback delays
-
-## Future Enhancements
-- Mobile touch controls
-- Multiplayer functionality
-- Additional enemy types
-- Power-ups and special weapons
-- Level progression system
 
 ## Credits
 - Created by Yuval Ellins and Idan Duhaviv
