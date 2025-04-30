@@ -1,4 +1,10 @@
 # Space Invaders Game
+## creators
+Yuval Ellins - 206964595 
+Idan Duhaviv - 208426197
+Website -  https://wed-2023.github.io/assignment2-206964595_208426197_assignment2/
+
+
 
 A modern web-based implementation of the classic Space Invaders arcade game with enhanced features and customization options.
 
@@ -55,12 +61,6 @@ The game is built using a component-based approach with the following key elemen
 3. Register a new account or use the test account:
    - Username: `p`
    - Password: `testuser`
-
-## creators
-Yuval Ellins - 206964595 
-Idan Duhaviv - 208426197
-Website -  https://wed-2023.github.io/assignment2-206964595_208426197_assignment2/
-
 
 
 ## Controls
