@@ -1,443 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Space Invaders</title>
-    <style>
-        /* General Reset and Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            z-index: -2;
-            background-image: 
-                radial-gradient(1px 1px at 20% 30%, white 60%, transparent 100%),
-                radial-gradient(1px 1px at 40% 70%, #a0c0ff 60%, transparent 100%),
-                radial-gradient(1px 1px at 60% 20%, white 60%, transparent 100%),
-                radial-gradient(1px 1px at 80% 80%, #d0e0ff 60%, transparent 100%),
-                radial-gradient(1px 1px at 10% 90%, #4a71b0 60%, transparent 100%);
-            background-repeat: repeat;
-            background-size: 200px 200px;
-            animation: subtleMove 30s linear infinite;
-            opacity: 0.5;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>My Game Website</title>
+        <link rel="stylesheet" href="style.css">
 
-        @keyframes subtleMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(-50px, -50px); }
-        }
-
-        body {
-            min-width: 1366px;
-            background-color: #121212;
-            color: #f0f0f0;
-            line-height: 1.6;
-        }
-        
-
-        /* Static stars */
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            z-index: -1;
-            box-shadow: 
-                50px 80px white, 150px 200px #a0c0ff, 300px 400px white, 
-                500px 100px #4a71b0, 800px 150px white, 1000px 50px #6ca0ff,
-                1200px 300px white, 1300px 600px #b0c4ff, 400px 500px white;
-            animation: twinkle 5s infinite alternate;
-        }
-
-        @keyframes twinkle {
-            from { opacity: 0.5; }
-            to { opacity: 1; }
-        }
-
-        /* Shooting star */
-    .shooting-star {
-        position: fixed;
-        top: -200px;
-        right: 0;
-        width: 150px;
-        height: 2px;
-        background: linear-gradient(to right, white, rgba(255, 255, 255, 0));
-        transform: rotate(-45deg);
-        opacity: 0;
-        animation: shoot 5s linear infinite;
-        z-index: -1;
-    }
-
-        @keyframes shoot {
-        0% {
-            transform: translate(0, 0) rotate(-45deg);
-            opacity: 0;
-        }
-        10% {
-            opacity: 1;
-        }
-        100% {
-            transform: translate(-1000px, 1000px) rotate(-45deg);
-            opacity: 0;
-        }
-    }
-
-
-
-
-        header {
-            background-color: #0a0a20;
-            color: #fff;
-            text-align: center;
-            padding: 1rem 0;
-            border-bottom: 2px solid #4a71b0;
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #4a71b0;
-            text-shadow: 0 0 10px rgba(74, 113, 176, 0.5);
-        }
-
-        nav {
-            background-color: #1a2747;
-            width: 100%;
-            height: 50px;
-            border-bottom: 3px solid #3a5999;
-            position: relative;
-            z-index: 100;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            justify-content: center;
-            height: 100%;
-            padding: 0;
-        }
-
-        nav li {
-            margin: 0;
-            height: 100%;
-        }
-
-        nav a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            color: #a0c0ff;
-            text-decoration: none;
-            padding: 0 25px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: background-color 0.2s ease;
-        }
-
-        nav a.disabled {
-            color: #556480;
-            background-color: #182239;
-            opacity: 0.7;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        nav a:hover {
-            background-color: #2c407a;
-            color: #ffffff;
-        }
-
-        nav a.active {
-            background-color: #3a5999;
-            color: white;
-        }
-
-        .screen {
-            display: none;
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            min-height: calc(100vh - 200px);
-        }
-
-        .screen.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        #login-screen.active, #register-screen.active {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 50px;
-        }
-
-        #Welcome {
-            text-align: center;
-            padding-top: 8rem;
-        }
-
-        #Welcome.active {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        #Welcome h2 {
-            font-size: 3.2rem;
-            color: #4a71b0;
-            margin-bottom: 3rem;
-            text-shadow: 0 0 15px rgba(74, 113, 176, 0.6);
-        }
-
-        .creators-info {
-            margin: 2rem 0;
-            padding: 1.5rem 3rem;
-            background-color: rgba(26, 39, 71, 0.5);
-            border-radius: 10px;
-            border: 1px solid #3a5999;
-        }
-
-        .welcome-buttons {
-            margin-top: 3rem;
-        }
-
-        .action-button {
-            background-color: #3a5999;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            margin: 0 10px;
-            font-size: 1.1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .action-button:hover {
-            background-color: #4a71b0;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(74, 113, 176, 0.4);
-        }
-
-        .modal {
-            background-color: #121225;
-            color: #f0f0f0;
-            border: 2px solid #3a5999;
-            border-radius: 10px;
-            max-width: 600px;
-            padding: 0;
-        }
-
-        .modal-content {
-            padding: 2rem;
-            position: relative;
-        }
-
-        .modal h2 {
-            color: #4a71b0;
-            margin-bottom: 1rem;
-        }
-
-        .modal button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            color: #a0c0ff;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .modal button:hover {
-            color: white;
-        }
-
-        .modal ul {
-            margin-left: 2rem;
-            color: #a0c0ff;
-        }
-
-        footer {
-            background-color: #0a0a20;
-            text-align: center;
-            padding: 1.5rem;
-            margin-top: 2rem;
-            color: #a0c0ff;
-            border-top: 2px solid #3a5999;
-        }
-
-        #game-container {
-            width: 100%;
-            height: 600px;
-            background-color: #0a0a20;
-            border: 2px solid #4a71b0;
-            border-radius: 10px;
-            margin: 2rem auto;
-        }
-
-        /* Settings moved to game screen */
-        .settings-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .setting-group {
-            background-color: rgba(26, 39, 71, 0.5);
-            padding: 1.5rem;
-            border-radius: 10px;
-        }
-
-        .setting-group h3 {
-            color: #4a71b0;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #3a5999;
-            padding-bottom: 0.5rem;
-        }
-
-        .settings-buttons {
-            margin-top: 2rem;
-            grid-column: 1 / -1;
-            text-align: center;
-        }
-
-        .secondary-button {
-            background-color: #314268;
-            color: #a0c0ff;
-            border: none;
-            padding: 10px 20px;
-            margin: 0 10px;
-            font-size: 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .secondary-button:hover {
-            background-color: #3a5999;
-            color: white;
-        }
-
-        .form-container {
-        background-color: rgba(42, 65, 117, 0.15);
-        padding: 2rem;
-        border-radius: 12px;
-        border: 2px solid #3a5999;
-        max-width: 500px;
-        margin: 2rem auto;
-        box-shadow: 0 0 15px rgba(74, 113, 176, 0.2);
-    }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            color: #a0c0ff;
-        }
-
-        .form-group label {
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-
-        .form-group input {
-            padding: 0.6rem 1rem;
-            border-radius: 6px;
-            border: 1px solid #3a5999;
-            background-color: #1e2f4f;
-            color: #ffffff;
-            font-size: 1rem;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #4a71b0;
-            box-shadow: 0 0 5px rgba(74, 113, 176, 0.5);
-        }
-
-        button[type="submit"] {
-                background-color: #3a5999;
-                color: white;
-                border: none;
-                padding: 12px 25px;
-                font-size: 1rem;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: all 0.3s;
-                text-transform: uppercase;
-                display: block;
-                margin: 0 auto;
-                width: 100%;
-                max-width: 200px;
-            }
-
-            button[type="submit"]:hover {
-                background-color: #4a71b0;
-            }
-                #change-key-btn {
-            background: linear-gradient(135deg, #2b3b65, #4a71b0);
-            border: none;
-            color: #e0f0ff;
-            font-size: 1rem;
-            padding: 10px 20px;
-            border-radius: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 8px rgba(74, 113, 176, 0.5), 0 0 14px rgba(58, 89, 153, 0.3) inset;
-            margin-top: 0.5rem;
-        }
-
-        #change-key-btn:hover {
-            background: linear-gradient(135deg, #4a71b0, #6c8fdb);
-            color: #ffffff;
-            transform: scale(1.04);
-            box-shadow: 0 0 12px rgba(120, 160, 255, 0.7), 0 0 18px rgba(74, 113, 176, 0.4) inset;
-        }
-        select {
-        background-color: #1e2f4f;
-        color: #ffffff;
-        padding: 0.6rem 1rem;
-        border-radius: 6px;
-        border: 1px solid #3a5999;
-        font-size: 1rem;
-        }
-
-        select:focus {
-            outline: none;
-            border-color: #4a71b0;
-            box-shadow: 0 0 5px rgba(74, 113, 176, 0.5);
-        }
-
-
-    </style>
-</head>
+    </head>
 <body>
     <div class="stars"></div>
     <div class="shooting-star" style="top: 10%; right: -100px; animation-delay: 2s;"></div>
@@ -445,30 +14,33 @@
     <div class="shooting-star" style="top: 70%; right: -120px; animation-delay: 10s;"></div>
     <div class="shooting-star" style="right: 500px; top: -200px; animation-delay: 5s;"></div>
     <div class="shooting-star" style="right: 800px; top: -200px; animation-delay: 7s;"></div>
-    
     <!-- Header Section -->
     <header>
         <h1>Space Invaders</h1>
+        
     </header>
 
     <!-- Navigation Menu -->
     <nav>
         <ul>
-            <li><a href="#" class="nav-link active" data-screen="home">Home</a></li>
+            <li><a href="#" class="nav-link" data-screen="home">Home</a></li>
             <li><a href="#" class="nav-link" data-screen="about">About</a></li>
-            <li><a href="#" class="nav-link disabled" data-screen="game">Play</a></li>
+            <li id="settings-nav-item" style="display: none;"><a href="#" class="nav-link" data-screen="settings">Setting</a></li>
+
+            <li id="game-nav-item" style="display: none;"><a href="#" class="nav-link" data-screen="game">Game</a></li>
         </ul>
     </nav>
 
     <!-- Main Content Area -->
     <main>
         <!--welcome screen-->
-        <div id="Welcome" class="screen active">
-            <h2>Welcome to Space Invaders</h2>
+        <div id="Welcome" class="screen">
+            <h2>Welcome, brave commander</h2>
             
+        
             <div class="creators-info">
                 <p><b>Game creators:</b></p>
-                <p>Yuval Ellins</p>
+                <p>Yuval Ellins - 206964595</p>
                 <p>Idan Duhaviv - 208426197</p>
             </div>
             
@@ -478,58 +50,57 @@
             </div>
         </div>
 
-        <!-- registration screen -->
-        <div id="register-screen" class="screen">
+            <!-- registration screen -->
+
+        <div id="register-screen" class ="screen">
             <h2>Registration</h2>
             <form id="reg-form">
-                <div class ="reg-container">
-                <div class="form-group">
+                <div class = "form-group">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" required>
                 </div>
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
+                <div class ="form-group">
+                    <label for="passowrd">Password:</label>
+                    <input type="password" id="password" name="password"  required>
+                    <br>
                     <small class="password-hint">Must include at least 1 number and letter, minimum 8 characters long</small>
                 </div>
                 <div class="form-group">
                     <label for="confirmPassword">Confirm Password:</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    <input type="password" id="confirmPassword" name="confirmPassword"  required>
                 </div>
                 <div class="form-group">
-                    <label for="firstName">First Name:</label>
-                    <input type="text" id="firstName" name="firstName" required>
+                    <label for="firstName">First name</label>
+                    <input type ="text" id="firstName" name="firstName"  required>
                 </div>
                 <div class="form-group">
-                    <label for="lastName">Last Name:</label>
-                    <input type="text" id="lastName" name="lastName" required>
+                    <label for="lastName">Laste name</label>
+                    <input type ="text" id="lastName" name="lastName"  required>
                 </div>
                 <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
+                    <label for="email">Email</label>
+                    <input type ="text" id="email" name="email"  required>
                 </div>
+
                 <div class="form-group">
-                    <label for="birthDay">Date of Birth:</label>
-                    <input type="date" id="birthDay" name="birthDay" required>
-                    <script>
-                        // Calendar helper for Chrome
-                        document.getElementById('birthDay').addEventListener('click', function() {
-                            this.showPicker();
-                        });
-                    </script>
+                    <label for="birthDay">Date of Birth</label>
+                    <input type ="date" id="birthDay" name="birthDay" placeholder="DD-MM-YYYY" required>
                 </div>
                 <div class="form-group">
                     <button type="submit" id="registerSubmit">Register</button>
                 </div>
-            </div>
             </form>
+        
+
+
+
+
         </div>
 
         <!-- Login Screen -->
         <div id="login-screen" class="screen">
             <h2>Login</h2>
             <form id="login-form">
-                <div class="form-container"?>
                 <div class="form-group">
                     <label for="username-login">Username:</label>
                     <input type="text" id="username-login" name="username" required>
@@ -539,511 +110,1088 @@
                     <input type="password" id="password-login" name="password" required>
                 </div>
                 <button type="submit">Login</button>
-            </div>
             </form>
         </div>
 
+    
+        <!-- Settings screen (only accessible after login) -->
+        <div id="settings" class="screen">
+          <h2>Game Settings</h2>
+          <div class="settings-container">
+              <!-- Controls Section -->
+              <div class="setting-group">
+                  <h3>Controls</h3>
+                  <!-- Firing Key -->
+                  <div class="form-group">
+                      <label for="firing-key">Firing Key:</label>
+                      <input type="text" id="firing-key" maxlength="10" value="Space" readonly>
+                      <button class="key-change-btn" data-control="firingKey">Change Key</button>
+                  </div>
+                  
+                  <!-- Movement Keys -->
+                  <div class="settings-container">
+                      <div class="form-group">
+                          <label for="move-left-key">Move Left:</label>
+                          <input type="text" id="move-left-key" maxlength="10" value="ArrowLeft" readonly>
+                          <button class="key-change-btn" data-control="moveLeftKey">Change Key</button>
+                      </div>
+                      
+                      <div class="form-group">
+                          <label for="move-right-key">Move Right:</label>
+                          <input type="text" id="move-right-key" maxlength="10" value="ArrowRight" readonly>
+                          <button class="key-change-btn" data-control="moveRightKey">Change Key</button>
+                      </div>
+                      
+                      <div class="form-group">
+                          <label for="move-up-key">Move Up:</label>
+                          <input type="text" id="move-up-key" maxlength="10" value="ArrowUp" readonly>
+                          <button class="key-change-btn" data-control="moveUpKey">Change Key</button>
+                      </div>
+                      
+                      <div class="form-group">
+                          <label for="move-down-key">Move Down:</label>
+                          <input type="text" id="move-down-key" maxlength="10" value="ArrowDown" readonly>
+                          <button class="key-change-btn" data-control="moveDownKey">Change Key</button>
+                      </div>
+                      
+                  </div>
+                  <p class="key-instructions">Click "Change Key" then press your desired key</p>
+
+              </div>
+      
+              <!-- Game Duration Section -->
+              <div class="setting-group">
+                  <h3>Game Duration</h3>
+                  <div class="form-group">
+                      <label for="game-time">Game Time (minutes):</label>
+                      <input type="number" id="game-time" min="2" value="2">
+                      <span class="setting-hint">Minimum: 2 minutes</span>
+                  </div>
+              </div>
+      
+              <div class="setting-group">
+                <h3>Appearance</h3>
+                <div class="form-group">
+                    <label for="player-ship-color">Player Ship Style:</label>
+                    <select id="player-ship-color" class="ship-select">
+                        <option value="blue">Blue</option>
+                        <option value="green" selected>Green</option>
+                        <option value="red">Red</option>
+                        <option value="gold">Gold</option>
+                    </select>
+                </div>
+                
+            </div>
+               
+              
+          </div>
+          <!-- Action Buttons -->
+          <div class="settings-buttons">
+            <button id="start-game" class="action-button">Start Game</button>
+            <button id="reset-settings" class="secondary-button">Reset Settings</button>
+        </div>
+      </div>
       
         <!-- Game Screen (only accessible after login) -->
-           <!-- Settings screen (only accessible after login) -->
-        <div id="settings" class="screen">
-            <h2>Game Settings</h2>
-            <div class="settings-container">
-                <div class="setting-group">
-                    <h3>Controls</h3>
-                    <div class="form-group">
-                        <label for="firing-key">Firing Key:</label>
-                        <input type="text" id="firing-key" maxlength="1" value="Space" readonly>
-                        <button id="change-key-btn">Change Key</button>
-                        <p class="key-instructions">Click "Change Key" then press your desired key</p>
-                    </div>
-                </div>
-
-                <div class="setting-group">
-                    <h3>Game Duration</h3>
-                    <div class="form-group">
-                        <label for="game-time">Game Time (minutes):</label>
-                        <input type="number" id="game-time" min="2" value="2">
-                        <span class="setting-hint">Minimum: 2 minutes</span>
-                    </div>
-                </div>
-
-                <div class="setting-group">
-                    <h3>Appearance</h3>
-                    <div class="form-group">
-                        <label for="player-color">Player Ship Color:</label>
-                        <select id="player-color">
-                            <option value="#00FF00">Green</option>
-                            <option value="#00BFFF">Blue</option>
-                            <option value="#FFD700">Gold</option>
-                            <option value="#FF69B4">Pink</option>
-                            <option value="#FF0000">Red</option>
-                        </select>                    
-                    </div>
-                    <div class="form-group">
-                        <label for="enemy-color">Enemy Ship Color:</label>
-                        <select id="enemy-color">
-                            <option value="#00FF00">Green</option>
-                            <option value="#00BFFF">Blue</option>
-                            <option value="#FFD700">Gold</option>
-                            <option value="#FF69B4">Pink</option>
-                            <option value="#FF0000">Red</option>
-                        </select>                   
-                     </div>
-                    <div class="form-group">
-                        <label for="brightness">Brightness:</label>
-                        <input type="range" id="brightness" min="50" max="150" value="100">
-                        <span id="brightness-value">100%</span>
-                    </div>
-                </div>
-
-                <div class="settings-buttons">
-                    <button id="start-game" class="action-button">Start Game</button>
-                    <button id="reset-settings" class="secondary-button">Reset Settings</button>
-                </div>
-            </div>
-        </div>
-
         <div id="game-screen" class="screen">
-            <h2>Game Area</h2>
             <div id="game-container">
+                <div id="game-hud">
+                    <div id="score">Score: 0</div>
+                    <div id="lives">Lives: 3</div>
+                    <div id="timer">Time: 120</div>
+                </div>
                 <!-- Game canvas or elements will go here -->
+                <div id="player-ship"></div> 
+                <div id="end-game-overlay" class="game-overlay">
+                    <div class="end-message-box" id="end-message-box">
+                        <h2 id="end-title">You Lost!</h2>
+                        <p id="end-subtitle">Final Score: <span id="final-score">0</span></p>
+                        <p class="hint">(Press SPACE to play again)</p>
+                    </div>
+                   
+                </div>
+            </div>
+            <div class="game-controls">
+              <button id="reset-game-btn" class="action-button">Reset Game</button>
             </div>
         </div>
-    </main>
 
-    <!-- About Dialog -->
-    <dialog id="about-dialog" class="modal">
-        <div class="modal-content">
-            <button id="close-about">×</button>
-            <h2>About Space Invaders</h2>
-            <p>Made by BGU - SISE students Yuval and Idan</p>
-            <p>This classic arcade-style game challenges players to defend Earth from alien invaders.</p>
-            <p>Game features include different enemy types, power-ups, and increasing difficulty levels.</p>
-            <p>This version was created as an educational project.</p>
-            <p>Game controls:</p>
-            <ul>
-                <li>Left/Right Arrow Keys: Move spaceship</li>
-                <li>Space Bar: Shoot</li>
-            </ul>
-        </div>
-    </dialog>
+        <!-- Score Screen -->
+        <div id="score-screen" class="screen">
+            <h2>Score History</h2>
+            <div id="score-history" class="score-history-box"></div>
+
+          <div class="button-column">
+            <button id="new-game-btn" class="action-button">NEW GAME</button>
+            <button id="back-home-btn" class="secondary-button">BACK TO HOME</button>
+            </div>
+          </div>
+
+        <!-- About Screen -->
+        <dialog id="about-dialog" class="modal">
+            <div class="modal-content">
+                <button id="close-about">X</button>
+
+                <h2>About the Game</h2>
+                <p>This game was developed as a Space Invaders style game with several enhancements.</p>
+                
+                <h3>Game Instructions:</h3>
+                <ul>
+                  <li>Move the player spaceship using the Arrow Keys (← ↑ ↓ →).</li>
+                  <li>Shoot enemy ships using the Spacebar.</li>
+                  <li>Avoid enemy fire and eliminate all enemy ships to win.</li>
+                </ul>
+                
+                <h3>Implemented Features:</h3>
+                <ul>
+                  <li><b>Timer:</b> A countdown timer shows the remaining time to complete the game.</li>
+                  <li><b>Acceleration:</b> Enemy ships and enemy shots speed up every few seconds to increase difficulty.</li>
+                </ul>
+                <h3>Challenges in developing our game:</h3>
+                <ul>
+                  <li><b>Collision Detection:</b> Implementing accurate collision detection between shots and ships while maintaining performance.</li>
+                  <li><b>Enemy Movement Patterns:</b> Creating challenging but fair enemy movement that changes direction at screen boundaries.</li>
+                  <li><b>Custom Controls:</b> Allowing players to rebind keys while preventing conflicts and maintaining game functionality.</li>
+                  <li><b>Game State Management:</b> Handling transitions between game states (menu, gameplay, game over) and preserving player data.</li>
+                  <li><b>Responsive Design:</b> Ensuring the game adapts to different screen sizes while maintaining playability.</li>
+                  <li><b>Sound Management:</b> Implementing audio features that enhance gameplay without overwhelming the player.</li>
+                </ul>
+                <p>The game was created by BGU SISE students Yuval and Idan as an educational project.</p>
+                
+            </div>
+        </dialog>
+
+        <!-- Add more screens as needed -->
+    </main>
 
     <!-- Footer Section -->
     <footer>
-        <p>&copy; 2025 Space Invaders Team Tigal. All rights reserved.</p>
-        <p></p>
+        <p>&copy; 2025 My Game Website. All rights reserved.</p>
+        <p>Created for educational purposes</p>
     </footer>
 
     <script>
-        // Array of users
-        let users = [
-            {username:'p', password:'testuser', firstName:'testName', lastName:'testLastN', email:'deezN@gmail.com', birthDay:'1999-09-09'}
-        ];
-        let isLogged = false; // login boolean
-        let currentUser = null; // who's connected at the moment        
-        let activeScreen = null; // keeps track for current active screen
+        // =======================
+    // GLOBAL VARIABLES
+    // =======================
+    let users = [
+      { username: 'p', password: 'testuser', firstName: 'Test', lastName: 'User', email: 'test@test.com', birthDay: '1999-09-09' }
+    ];
+    let isLogged = false;
+    let currentUser = null;
+    let scoreHistory = {};
+    let playerRespawning = false;
+    let activeScreen = null;
+    let gamePaused = false;
+    let gameEnded = false;
+    let playerX = 0;
+    let playerY = 20;
+    let keysPressed = {};
+    let enemies = [];
+    let playerShots = [];
+    let activeEnemyShot = null;
+    let score = 0;
+    let lives = 3;
+    let timeLeft = 120;
+    let shotCooldown = false; 
+    let enemyMoveInterval;
+    let enemyFireInterval;
+    let timerInterval;
+    let accelerationInterval;
+    let accelerationCount = 0;
+    let enemyMoveSpeed = 200;
+    let enemyShotSpeed = 5;
+    gameSettings = {
+    firingKey: ' ',
+    moveLeftKey: 'ArrowLeft',
+    moveRightKey: 'ArrowRight',
+    moveUpKey: 'ArrowUp',
+    moveDownKey: 'ArrowDown',
+    playerShipColor: 'green',
+};
 
-        // Function to show/hide screens
-        function showScreen(screenID) {
-            console.log("Attempting to show screen:", screenID);
-            
-            // Remove active class from current screen
-            if (activeScreen) {
-                console.log("Removing active class from:", activeScreen.id);
-                activeScreen.classList.remove('active');
-            } else {
-                console.log("No active screen to remove class from");
-            }
-            
-            // Find the new target screen
-            const targetScreen = document.getElementById(screenID);
-            console.log("Found target screen:", targetScreen);
-            
-            // Add active class to new screen
-            if (targetScreen) {
-                console.log("Adding active class to:", screenID);
-                targetScreen.classList.add('active');
-                activeScreen = targetScreen;
-                
-                // Update active state in navigation
-                updateNavActiveState(screenID);
-            } else {
-                console.log("ERROR: Target screen not found:", screenID);
-            }
+
+    const soundShot = new Audio('sounds/shot.mp3');
+    const soundHit = new Audio('sounds/hit.mp3');
+    const soundLose = new Audio('sounds/lost_the_game.mp3');
+    let soundVictory = new Audio('sounds/victory.mp3');
+    let backgroundMusic = new Audio('sounds/background.mp3');
+    backgroundMusic.loop = true;       // 🔄 כדי שיתנגן בלופ כל הזמן
+    backgroundMusic.volume = 0.2;       // 🔉 עוצמה נמוכה (0 עד 1) - פה שמתי 20%
+
+        
+    // =======================
+    // SCREEN MANAGEMENT
+    // =======================
+    function showScreen(screenId) {
+      if (activeScreen) activeScreen.classList.remove('active');
+      const targetScreen = document.getElementById(screenId);
+      if (targetScreen) {
+        targetScreen.classList.add('active');
+        activeScreen = targetScreen;
+      }
+    }
+    
+    // =======================
+    // DOM READY
+    // =======================
+    document.addEventListener('DOMContentLoaded', function() {
+  // Set active screen
+  activeScreen = document.getElementById('Welcome');
+  activeScreen.classList.add('active');
+  
+  // Set up about dialog
+  const aboutDialog = document.getElementById('about-dialog');
+  if (aboutDialog) {
+    // Add click listener to close dialog when clicking outside
+    aboutDialog.addEventListener('click', function(event) {
+      const dialogDimensions = aboutDialog.getBoundingClientRect();
+      if (
+        event.clientX < dialogDimensions.left ||
+        event.clientX > dialogDimensions.right ||
+        event.clientY < dialogDimensions.top ||
+        event.clientY > dialogDimensions.bottom
+      ) {
+        aboutDialog.close();
+      }
+    });
+       // Prevent clicks on dialog content from closing the dialog
+       const modalContent = aboutDialog.querySelector('.modal-content');
+    if (modalContent) {
+      modalContent.addEventListener('click', function(event) {
+        event.stopPropagation();
+      });
+    }
+  }
+   // Initialize the site
+   setupNavigation();
+  setupAuth();
+  setupSettings();
+  setupButtons();
+});
+  
+    // =======================
+    // SETUP FUNCTIONS
+    // =======================
+    function setupNavigation() {
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const screenId = this.getAttribute('data-screen');
+          if (screenId === 'game' && !isLogged) {
+            alert('Please log in first');
+            showScreen('login-screen');
+          } else if (screenId === 'home') {
+            showScreen('Welcome');
+          } else if (screenId === 'about') {
+            document.getElementById('about-dialog').showModal();
+          } else if (screenId === 'settings') {
+            showScreen('settings'); 
+          } else {
+            showScreen(screenId + '-screen');
+          }
+        });
+      });
+    
+      document.getElementById('close-about')?.addEventListener('click', () => {
+        document.getElementById('about-dialog').close();
+      });
+    
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') document.getElementById('about-dialog').close();
+      });
+    }
+    
+    function setupAuth() {
+      document.getElementById('login-button')?.addEventListener('click', () => showScreen('login-screen'));
+      document.getElementById('register-button')?.addEventListener('click', () => showScreen('register-screen'));
+    
+      document.getElementById('reg-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const confirmPassword = document.getElementById('confirmPassword').value.trim();
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const birthDay = document.getElementById('birthDay').value.trim();
+    
+        if (password.length < 8 || !/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
+          alert('Password must be at least 8 characters and include letters and numbers.');
+          return;
         }
-
-        // Update the active state in the navigation
-        function updateNavActiveState(screenID) {
-            // Remove active class from all nav links
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            // Map screen IDs to their corresponding data-screen attribute
-            let dataScreen;
-            if (screenID === 'Welcome') {
-                dataScreen = 'home';
-            } else if (screenID === 'settings') {
-                dataScreen = 'settings';
-            } else if (screenID === 'game-screen') {
-                dataScreen = 'game';
-            } else if (screenID === 'about-dialog') {
-                dataScreen = 'about';
-            } else {
-                // For other screens, remove the '-screen' suffix if it exists
-                dataScreen = screenID.replace('-screen', '');
-            }
-            
-            // Add active class to the appropriate nav link
-            const activeNavLink = document.querySelector(`.nav-link[data-screen="${dataScreen}"]`);
-            if (activeNavLink) {
-                activeNavLink.classList.add('active');
-            }
+        if (password !== confirmPassword) {
+          alert('Passwords do not match.');
+          return;
         }
-
-        // Function to enable navigation items after login
-        function enableNavItemsAfterLogin() {
-            const settingsLink = document.querySelector('.nav-link[data-screen="settings"]');
-            const gameLink = document.querySelector('.nav-link[data-screen="game"]');
-            
-            if (settingsLink) {
-                settingsLink.classList.remove('disabled');
-            }
-            
-            if (gameLink) {
-                gameLink.classList.remove('disabled');
-            }
+        if (!/^\S+@\S+\.\S+$/.test(email)) {
+          alert('Invalid email address.');
+          return;
         }
-
-        // Function to disable navigation items on logout
-        function disableNavItemsOnLogout() {
-            const settingsLink = document.querySelector('.nav-link[data-screen="settings"]');
-            const gameLink = document.querySelector('.nav-link[data-screen="game"]');
-            
-            if (settingsLink) {
-                settingsLink.classList.add('disabled');
-            }
-            
-            if (gameLink) {
-                gameLink.classList.add('disabled');
-            }
+        if (users.some(u => u.username === username)) {
+          alert('Username already exists.');
+          return;
         }
+    
+        users.push({ username, password, firstName, lastName, email, birthDay });
+        alert('Registration successful. Please log in.');
+        showScreen('login-screen');
+      });
+    
+      document.getElementById('login-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const username = document.getElementById('username-login').value.trim();
+        const password = document.getElementById('password-login').value.trim();
+        const user = users.find(u => u.username === username && u.password === password);
+    
+        if (user) {
+          currentUser = user;
+          isLogged = true;
+          document.getElementById('settings-nav-item').style.display = 'inline-block';
+          document.getElementById('game-nav-item').style.display = 'inline-block';
+          if (!scoreHistory[currentUser.username]) scoreHistory[currentUser.username] = [];
+          showScreen('settings');
+        } else {
+          alert('Invalid username or password.');
+        }
+      });
+    }
+    
+    function setupSettings() {
+  // Add event listeners for all key change buttons
+  document.querySelectorAll('.key-change-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      const controlType = this.getAttribute('data-control');
+      const inputId = getInputIdForControl(controlType);
+      const input = document.getElementById(inputId);
+      
+      input.value = 'Press a key...';
+      
+      // Remove any existing key listener to avoid duplicates
+      if (window.activeKeyListener) {
+        document.removeEventListener('keydown', window.activeKeyListener);
+      }
+      
+      // Create and store the key listener
+      window.activeKeyListener = function(e) {
+        e.preventDefault();
+        
+        let keyName = e.key;
+        let displayName = keyName;
+        
+        if (keyName === ' ') displayName = 'Space';
+        
+        gameSettings[controlType] = keyName;
+        input.value = displayName;
+        
+        document.removeEventListener('keydown', window.activeKeyListener);
+        window.activeKeyListener = null;
+      };
+      
+      document.addEventListener('keydown', window.activeKeyListener);
+    });
+  });
+  
+  const playerShipSelect = document.getElementById('player-ship-color');
+  
+  // Initialize with default values
+  playerShipSelect.value = gameSettings.playerShipColor;
+  
+  playerShipSelect?.addEventListener('change', function() {
+    gameSettings.playerShipColor = this.value;
+    updateShipPreview('player');
+  });
+  
+  addShipPreviews();
+ 
+ 
+  
+  document.getElementById('start-game')?.addEventListener('click', startNewGame);
+  document.getElementById('reset-settings')?.addEventListener('click', resetSettings);
+}
+function addShipPreviews() {
+  const playerSelect = document.getElementById('player-ship-color');
+  
+  // Add player ship preview
+  if (!document.getElementById('player-ship-preview')) {
+    const playerPreview = document.createElement('span');
+    playerPreview.id = 'player-ship-preview';
+    playerPreview.className = 'ship-preview';
+    // Corrected path with images folder
+    playerPreview.style.backgroundImage = `url('images/user ${playerSelect.value} ship.png')`;
+    playerSelect.parentNode.appendChild(playerPreview);
+  }
+  
+  // Update initial preview
+  updateShipPreview('player');
+}
 
-        // DOM Content Loaded Event Handler
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set initial active screen
-     
-            activeScreen = document.querySelector('.screen.active');
+function updateShipPreview(type) {
+  if (type === 'player') {
+    const preview = document.getElementById('player-ship-preview');
+    const color = gameSettings.playerShipColor;
+    if (preview) {
+      preview.style.backgroundImage = `url('images/user ${color} ship.png')`;
+    }
+  }
+}
 
-            
-            // Navigation bar event listeners
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault(); // Prevent default anchor behavior
-                    
-                    // Don't do anything if the link is disabled
-                    if (this.classList.contains('disabled')) {
-                        alert('Please log in to access this feature');
-                        showScreen('login-screen');
-                        return;
-                    }
-                    
-                    const screenId = this.getAttribute('data-screen');
-                    
-                    // Handle special cases for different screens
-                    if (screenId === 'home') {
-                        // For 'home' data-screen attribute, show Welcome screen
-                        showScreen('Welcome');
-                    } else if (screenId === 'about') {
-                        document.getElementById('about-dialog').showModal();
-                    } else {
-                        // For other screens, use the data-screen attribute with '-screen' suffix
-                        showScreen(screenId + '-screen');
-                    }
-                });
-            });
 
-            // Welcome screen button listeners
-            const loginButton = document.getElementById('login-button');
-            const registerButton = document.getElementById('register-button');
+// Helper function to get the corresponding input ID for a control type
+function getInputIdForControl(controlType) {
+  switch(controlType) {
+    case 'firingKey': return 'firing-key';
+    case 'moveLeftKey': return 'move-left-key';
+    case 'moveRightKey': return 'move-right-key';
+    case 'moveUpKey': return 'move-up-key';
+    case 'moveDownKey': return 'move-down-key';
+    default: return '';
+  }
+}
 
-            if (registerButton) {
-                registerButton.addEventListener('click', function() {
-                    showScreen('register-screen');
-                    updateNavActiveState('register-screen');
+function resetSettings() {
+  // Reset all controls to defaults
+  gameSettings.firingKey = ' ';
+  gameSettings.moveLeftKey = 'ArrowLeft';
+  gameSettings.moveRightKey = 'ArrowRight';
+  gameSettings.moveUpKey = 'ArrowUp';
+  gameSettings.moveDownKey = 'ArrowDown';
+  gameSettings.playerShipColor = 'green';
+  
+  // Update the UI to show default values
+  document.getElementById('firing-key').value = 'Space';
+  document.getElementById('move-left-key').value = 'ArrowLeft';
+  document.getElementById('move-right-key').value = 'ArrowRight';
+  document.getElementById('move-up-key').value = 'ArrowUp';
+  document.getElementById('move-down-key').value = 'ArrowDown';
+  
+  // Reset player ship color
+  document.getElementById('player-ship-color').value = 'green';
+  
+  // Update player preview
+  updateShipPreview('player');
+  
+  // Reset other settings
+  document.getElementById('game-time').value = 2;
+}
+function setupButtons() {
+  // Set up NEW GAME button on score screen
+  const newGameBtn = document.getElementById('new-game-btn');
+  if (newGameBtn) {
+    newGameBtn.addEventListener('click', function() {
+      startNewGame();
+    });
+  }
+  
+  // Set up BACK TO HOME button on score screen
+  const backHomeBtn = document.getElementById('back-home-btn');
+  if (backHomeBtn) {
+    backHomeBtn.addEventListener('click', function() {
+      showScreen('Welcome');
+    });
+  }
+  
+  // Set up RESET GAME button on game screen
+  const resetGameBtn = document.getElementById('reset-game-btn');
+  if (resetGameBtn) {
+    resetGameBtn.addEventListener('click', function() {
+      // Only if the game isn't already over
+      if (!gameEnded) {
+        // Ask for confirmation to avoid accidental resets
+        if (confirm('Are you sure you want to reset the game? Your current progress will be lost.')) {
+          startNewGame();
+        }
+      } else {
+        // If game is already over, no need for confirmation
+        startNewGame();
+      }
+    });
+  }
+}
+document.addEventListener('keydown', function(e) {
+  // List of keys that need preventDefault to avoid scrolling the page
+  const keysToPrevent = [' ', 'Spacebar', 'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+  
+  // Add custom keys to the prevention list
+  if (gameSettings.firingKey) keysToPrevent.push(gameSettings.firingKey);
+  if (gameSettings.moveLeftKey) keysToPrevent.push(gameSettings.moveLeftKey);
+  if (gameSettings.moveRightKey) keysToPrevent.push(gameSettings.moveRightKey);
+  if (gameSettings.moveUpKey) keysToPrevent.push(gameSettings.moveUpKey);
+  if (gameSettings.moveDownKey) keysToPrevent.push(gameSettings.moveDownKey);
+  
+  if (keysToPrevent.includes(e.key) || keysToPrevent.includes(e.code)) {
+    if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
+      e.preventDefault();
+    }
+  }
 
-                });
-            }
+  keysPressed[e.key] = true;
 
-            if (loginButton) {
-                loginButton.addEventListener('click', function() {
-                    showScreen('login-screen');
-                    updateNavActiveState('login-screen');
+  // Use custom firing key
+  if (e.key === gameSettings.firingKey && !gamePaused && !gameEnded) {
+    firePlayerShot();
+  }
 
-                });
-            }
+  // Handle game restart after game over
+  if (gameEnded && (e.key === ' ' || e.code === 'Space')) {
+    document.removeEventListener('keydown', restartListener);
+    showScreen('score-screen');
+    renderScoreTable();
+  }
 
-            // Registration form handling
-            const registerForm = document.getElementById('reg-form');
-            if (registerForm) {
-                registerForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
+  // Close the about dialog with Escape
+  if (e.key === 'Escape') {
+    document.getElementById('about-dialog')?.close();
+  }
+});
 
-                    const username = document.getElementById('username').value;
-                    const password = document.getElementById('password').value;
-                    const confirmPassword = document.getElementById('confirmPassword').value;
-                    const firstName = document.getElementById('firstName').value;
-                    const lastName = document.getElementById('lastName').value;
-                    const email = document.getElementById('email').value;
-                    const Bday = document.getElementById('birthDay').value;
-                    
-                    // Check password requirements
-                    let validPass = false;
-                    let passLen = false;
-                    let passCharBool = false;
-                    let passIntBool = false;
-                    
-                    if (password.length >= 8) {
-                        passLen = true;
-                    } else {
-                        alert('Password minimum length is 8 characters');
-                        return;
-                    }
-                    
-                    for (let i = 0; i < password.length; i++) {
-                        const char = password[i];
-                        if (/[a-zA-Z]/.test(char)) {
-                            passCharBool = true;
-                        } else if (/[0-9]/.test(char)) {
-                            passIntBool = true;
-                        }
-                    }
-                    
-                    if (passCharBool && passIntBool) {
-                        validPass = true;
-                    } else {
-                        alert('Password must contain at least 1 digit and 1 letter');
-                        return;
-                    }
+document.addEventListener('keyup', function(e) {
+  keysPressed[e.key] = false;
+});
 
-                    // Check if passwords match
-                    if (password !== confirmPassword) {
-                        alert('Passwords do not match');
-                        return;
-                    }
+// Update the movement interval to use custom movement keys
+setInterval(() => {
+  if (!gameEnded && !gamePaused) {
+    const step = 10;
+    if (keysPressed[gameSettings.moveLeftKey]) movePlayer(-step, 0);
+    if (keysPressed[gameSettings.moveRightKey]) movePlayer(step, 0);
+    if (keysPressed[gameSettings.moveUpKey]) movePlayer(0, step);
+    if (keysPressed[gameSettings.moveDownKey]) movePlayer(0, -step);
+  }
+}, 30);
+    // =======================
+    // GAME CORE
+    // =======================
 
-                    // Check if email is valid
-                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailPattern.test(email)) {
-                        alert('Invalid email');
-                        return;
-                    }
+    
+    function startNewGame() {
+    resetGame();
+    showScreen('game-screen');
+    if (!backgroundMusic.paused) {
+    backgroundMusic.pause()
+    backgroundMusic.currentTime = 0;
+    }
+    backgroundMusic.play();
 
-                    // Check if username already exists
-                    if (users.some(u => u.username === username)) {
-                        alert('Username already exists!');
-                        return;
-                    }
+ 
 
-                    // All valid! Let's add the user to the array
-                    const newUser = {
-                        username: username,
-                        password: password,
-                        firstName: firstName,
-                        lastName: lastName,
-                        email: email,
-                        birthDay: Bday
-                    };
+    // ✅ תוספת חשובה: להעלים את תוצאות המשחק הקודם
+    const endOverlay = document.getElementById("end-game-overlay");
+    if (endOverlay) {
+        endOverlay.classList.remove("visible");
+        endOverlay.style.display = "none"; // להעלים גם לחלוטין
+    }
 
-                    users.push(newUser);
-                    alert('Registration successful! Please log in, commander');
-                    showScreen('login-screen');
-                });
-            }
-                    
-            // Handle login form submission
-            const loginForm = document.getElementById('login-form');
-            if (loginForm) {
-                loginForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    console.log("Login form submitted");
-                    
-                    const username = document.getElementById('username-login').value;
-                    const password = document.getElementById('password-login').value;
-                    
-                    const user = users.find(u => u.username === username && u.password === password);
-                    if (user) {
-                        isLogged = true; // Now the user is logged in
-                        currentUser = user;
-                        
-                        // Enable navigation items by removing the disabled class
-                        enableNavItemsAfterLogin();
-                        
-                        // Show settings screen
-                        showScreen('settings');
-                        
-                        console.log('User logged in:', username);
-                    } else {
-                        alert("Invalid username or password");
-                    }
-                });
-            }
+    spawnPlayer();
+    spawnEnemies();
+    updateHUD();
+    startTimer();
+    
+    enemyMoveInterval = setInterval(moveEnemies, enemyMoveSpeed);
+    enemyFireInterval = setInterval(fireEnemyShot, 500);
+    accelerationInterval = setInterval(accelerateEnemies, 5000);
+    }
 
-            // Settings functionality
-            const firingKeyInput = document.getElementById('firing-key');
-            const changeKeyBtn = document.getElementById('change-key-btn');
-            const gameTimeInput = document.getElementById('game-time');
-            const playerColorInput = document.getElementById('player-color');
-            const enemyColorInput = document.getElementById('enemy-color');
-            const brightnessInput = document.getElementById('brightness');
-            const brightnessValue = document.getElementById('brightness-value');
-            const startGameBtn = document.getElementById('start-game');
-            const resetSettingsBtn = document.getElementById('reset-settings');
+    
+   
+    
+    function resetGame() {
+      clearInterval(enemyMoveInterval);
+      clearInterval(enemyFireInterval);
+      clearInterval(timerInterval);
+      clearInterval(accelerationInterval);
+    
+      document.getElementById('game-container').querySelectorAll('.enemy-ship, .player-shot, .enemy-shot').forEach(e => e.remove());
+    
+      enemies = [];
+      activePlayerShot = null;
+      activeEnemyShot = null;
+      score = 0;
+      lives = 3;
+      timeLeft = parseInt(document.getElementById('game-time').value || 2) * 60;
+      enemyMoveSpeed = 200;
+      enemyShotSpeed = 5;
+      accelerationCount = 0;
+      gameEnded = false;
+      gamePaused = false;
+    }
+    
+    function updateHUD() {
+      document.getElementById('score').textContent = `Score: ${score}`;
+      document.getElementById('lives').textContent = `Lives: ${lives}`;
+      document.getElementById('timer').textContent = `Time: ${timeLeft}`;
+    }
+    
+    function spawnPlayer() {
+      const player = document.getElementById('player-ship');
+      const container = document.getElementById('game-container');
+      
+      // Corrected path with images folder
+      player.style.backgroundImage = `url('images/user ${gameSettings.playerShipColor} ship.png')`;
+      
+      // Calculate center position
+      const containerWidth = container.clientWidth;
+      const playerWidth = player.offsetWidth || 50; 
+      // Set playerX to center the ship horizontally
+      playerX = (containerWidth / 2) - (playerWidth / 2);
+      // Set playerY to a suitable height from the bottom
+      playerY = 20;
+      
+      // Apply the position
+      player.style.left = `${playerX}px`;
+      player.style.bottom = `
+      ${playerY}px`;
+    }
+    function spawnEnemies() {
+  const container = document.getElementById('game-container');
+  const rows = 4;
+  const cols = 5;
+  const spacing = 60;
 
-            // Default settings
-            const defaultSettings = {
-                firingKey: ' ', // Space
-                firingKeyDisplay: 'Space',
-                gameTime: 2,
-                playerColor: '#00FF00',
-                enemyColor: '#FF0000',
-                brightness: 100
-            };
+  // Define colors for each row (bottom to top)
+  const rowColors = ['red', 'blue', 'green', 'gold'];
 
-            // Current settings
-            let gameSettings = {...defaultSettings};
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const enemy = document.createElement('div');
+      enemy.className = 'enemy-ship';
+      
+      enemy.classList.add(`row-${r}`);
+      const colorIndex = r; // Use row index directly to get color
+      const enemyColor = rowColors[colorIndex];
+      enemy.style.backgroundImage = `url('images/enemy ${enemyColor}.png')`;
+      
+      enemy.style.left = `${100 + c * spacing}px`;
+      enemy.style.top = `${50 + r * spacing}px`;
+      
+      container.appendChild(enemy);
+      enemies.push(enemy);
+    }
+  }
+}
 
-            // Change firing key functionality
-            if (changeKeyBtn) {
-                changeKeyBtn.addEventListener('click', function() {
-                    firingKeyInput.value = 'Press any key...';
-                    firingKeyInput.classList.add('listening');
-                    
-                    // One-time event listener for the next keypress
-                    const keyListener = function(e) {
-                        e.preventDefault();
-                        let keyName = e.key;
-                        let displayName = keyName;
-                        
-                        // Handle special keys
-                        if (keyName === ' ') {
-                            displayName = 'Space';
-                        } else if (keyName === 'ArrowLeft') {
-                            displayName = '←';
-                        } else if (keyName === 'ArrowRight') {
-                            displayName = '→';
-                        } else if (keyName === 'ArrowUp') {
-                            displayName = '↑';
-                        } else if (keyName === 'ArrowDown') {
-                            displayName = '↓';
-                        }
-                        
-                        // Update the input and settings
-                        firingKeyInput.value = displayName;
-                        gameSettings.firingKey = keyName;
-                        gameSettings.firingKeyDisplay = displayName;
-                        
-                        // Remove the listening class and this event listener
-                        firingKeyInput.classList.remove('listening');
-                        document.removeEventListener('keydown', keyListener);
-                    };
-                    
-                    document.addEventListener('keydown', keyListener);
-                });
-            }
+    let enemyDirection = 1; // 1=right, -1=left
+    const enemyStep = 10;
+    
+    function moveEnemies() {
+      if (enemies.length === 0) return;
+    
+      const container = document.getElementById('game-container');
+      const containerWidth = container.clientWidth;
+    
+      let leftmost = Infinity;
+      let rightmost = -Infinity;
+    
+      enemies.forEach(enemy => {
+        const x = parseFloat(enemy.style.left);
+        leftmost = Math.min(leftmost, x);
+        rightmost = Math.max(rightmost, x + enemy.offsetWidth);
+      });
+    
+      if (rightmost + enemyStep * enemyDirection > containerWidth || leftmost + enemyStep * enemyDirection < 0) {
+        enemyDirection *= -1;
+      }
+    
+      enemies.forEach(enemy => {
+        enemy.style.left = (parseFloat(enemy.style.left) + enemyStep * enemyDirection) + 'px';
+      });
+    }
+    
 
-            // Update brightness display
-            if (brightnessInput) {
-                brightnessInput.addEventListener('input', function() {
-                    brightnessValue.textContent = this.value + '%';
-                    gameSettings.brightness = parseInt(this.value);
-                });
-            }
+    function fireEnemyShot() {
+      if (activeEnemyShot) return; // Only one active enemy shot at a time
+      if (enemies.length === 0) return; // No enemies to fire
 
-            // Update game time
-            if (gameTimeInput) {
-                gameTimeInput.addEventListener('change', function() {
-                    // Ensure minimum value
-                    if (this.value < 2) {
-                        this.value = 2;
-                    }
-                    gameSettings.gameTime = parseInt(this.value);
-                });
-            }
+      const randomEnemy = enemies[Math.floor(Math.random() * enemies.length)];
+      const shot = document.createElement('div');
+      shot.className = 'enemy-shot';
 
-            // Update colors
-            if (playerColorInput) {
-                playerColorInput.addEventListener('change', function() {
-                    gameSettings.playerColor = this.value;
-                });
-            }
+      const x = parseFloat(randomEnemy.style.left) + randomEnemy.offsetWidth / 2 - 4;
+      const y = parseFloat(randomEnemy.style.top) + randomEnemy.offsetHeight;
 
-            if (enemyColorInput) {
-                enemyColorInput.addEventListener('change', function() {
-                    gameSettings.enemyColor = this.value;
-                });
-            }
+      shot.style.left = `${x}px`;
+      shot.style.top = `${y}px`;
 
-            // Reset settings
-            if (resetSettingsBtn) {
-                resetSettingsBtn.addEventListener('click', function() {
-                    // Reset to defaults
-                    gameSettings = {...defaultSettings};
-                    
-                    // Update UI
-                    firingKeyInput.value = gameSettings.firingKeyDisplay;
-                    gameTimeInput.value = gameSettings.gameTime;
-                    playerColorInput.value = gameSettings.playerColor;
-                    enemyColorInput.value = gameSettings.enemyColor;
-                    brightnessInput.value = gameSettings.brightness;
-                    brightnessValue.textContent = gameSettings.brightness + '%';
-                });
-            }
+      document.getElementById('game-container').appendChild(shot);
+      activeEnemyShot = shot;
 
-            // Start game
-            if (startGameBtn) {
-                startGameBtn.addEventListener('click', function() {
-                    // Save settings and show game screen
-                    console.log('Starting game with settings:', gameSettings);
-                    showScreen('game-screen');
-                    
-                    // Here you would initialize your game with the chosen settings
-                });
-            }
+      moveShot(shot, 'enemy');
+    }
 
-            // About dialog functionality
-            const aboutDialog = document.getElementById('about-dialog');
-            const closeAboutBtn = document.getElementById('close-about');
 
-            // Close button event listener
-            if (closeAboutBtn) {
-                closeAboutBtn.addEventListener('click', function() {
-                    aboutDialog.close();
-                });
-            }
+    function moveShot(shot, type) {
+  const container = document.getElementById('game-container');
+  const hudHeight = 40; 
+  const containerHeight = container.clientHeight - hudHeight;
 
-            // Close on Escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && aboutDialog.open) {
-                    aboutDialog.close();
-                }
-            });
+  const interval = setInterval(() => {
+    let pos = type === 'enemy' ? parseFloat(shot.style.top) : parseFloat(shot.style.bottom);
+    pos += type === 'enemy' ? enemyShotSpeed : 10;
+    
+    if (type === 'enemy') {
+      shot.style.top = `${pos}px`;
+      checkEnemyShotCollision(shot, interval);
+      
+      // Check if enemy shot has traveled 3/4 of the screen height
+      const shotTravelDistance = pos - hudHeight; // Distance traveled from the top of play area
+      if (shotTravelDistance >= (containerHeight * 0.75) && activeEnemyShot === shot) {
+        // Shot has traveled 3/4 of the way - fire another shot if possible
+        activeEnemyShot = null; // Allow a new shot to be fired
+        fireEnemyShot(); // Fire a new shot
+      }
+      
+      // If enemy shot goes beyond screen bottom
+      if (pos > containerHeight + hudHeight) {
+        clearInterval(interval);
+        shot.remove();
+        // Only reset activeEnemyShot if this is the active shot
+        if (activeEnemyShot === shot) {
+          activeEnemyShot = null;
+        }
+      }
+    } else {
+      shot.style.bottom = `${pos}px`;
+      checkPlayerShotCollision(shot, interval);
+      
+      // If player shot goes beyond screen top
+      if (pos > containerHeight) {
+        clearInterval(interval);
+        shot.remove();
+        const index = playerShots.indexOf(shot);
+        if (index > -1) {
+          playerShots.splice(index, 1);
+        }
+      }
+    }
+  }, 20);
+}
 
-            // Close when clicking outside the dialog
-            aboutDialog.addEventListener('click', function(e) {
-                const dialogDimensions = aboutDialog.getBoundingClientRect();
-                if (
-                    e.clientX < dialogDimensions.left ||
-                    e.clientX > dialogDimensions.right ||
-                    e.clientY < dialogDimensions.top ||
-                    e.clientY > dialogDimensions.bottom
-                ) {
-                    aboutDialog.close();
-                }
-            });
-        }); // Closing bracket for DOMContentLoaded
-    </script>
-</body>
-</html>
+function firePlayerShot() {
+  // Don't allow shooting while in cooldown or respawning
+  if (shotCooldown || playerRespawning) {
+    return;
+  }
+
+  const player = document.getElementById('player-ship');
+  const shot = document.createElement('div');
+  shot.className = 'player-shot';
+
+  const x = parseFloat(player.style.left) + player.offsetWidth / 2 - 3;
+  const y = parseFloat(player.style.bottom) + player.offsetHeight;
+
+  shot.style.left = `${x}px`;
+  shot.style.bottom = `${y}px`;
+
+  document.getElementById('game-container').appendChild(shot);
+  playerShots.push(shot);
+
+  moveShot(shot, 'player');
+
+  // Play sound effect
+  const newSound = soundShot.cloneNode(); 
+  newSound.volume = 0.5;
+  newSound.play();
+  
+  // Start cooldown
+  shotCooldown = true;
+  
+  // Reset cooldown after delay
+  setTimeout(() => {
+    shotCooldown = false;
+  }, 300);
+}
+    
+    function checkEnemyShotCollision(shot, interval) {
+      const player = document.getElementById('player-ship');
+      const shotRect = shot.getBoundingClientRect();
+      const playerRect = player.getBoundingClientRect();
+    
+      if (shotRect.left < playerRect.right &&
+          shotRect.right > playerRect.left &&
+          shotRect.top < playerRect.bottom &&
+          shotRect.bottom > playerRect.top) {
+        clearInterval(interval);
+        shot.remove();
+        activeEnemyShot = null;
+        handlePlayerHit();
+      }
+    }
+    
+    function checkPlayerShotCollision(shot, interval) {
+  for (let i = 0; i < enemies.length; i++) {
+    const enemy = enemies[i];
+    const shotRect = shot.getBoundingClientRect();
+    const enemyRect = enemy.getBoundingClientRect();
+
+    if (shotRect.left < enemyRect.right &&
+        shotRect.right > enemyRect.left &&
+        shotRect.top < enemyRect.bottom &&
+        shotRect.bottom > enemyRect.top) {
+      
+      clearInterval(interval);
+      shot.remove();
+      activePlayerShot = null;
+
+      // ניקוד לפי שורה
+      let points = 5; // ברירת מחדל: 5 נקודות
+      if (enemy.classList.contains('row-2')) {
+        points = 10;
+      } else if (enemy.classList.contains('row-1')) {
+        points = 15;
+      } else if (enemy.classList.contains('row-0')) {
+        points = 20;
+      }
+
+      score += points; // הוספת הניקוד הנכון!
+
+      enemy.remove();
+      enemies.splice(i, 1);
+      updateHUD();
+      checkWin();
+      break;
+    }
+  }
+}
+
+
+    
+function handlePlayerHit() {
+  lives--;
+  updateHUD();
+
+  if (lives <= 0) {
+    soundLose.play();
+    endGame('lost');
+  } else {
+    // Set respawning flag to true
+    playerRespawning = true;
+    
+    // Hide the player ship
+    const player = document.getElementById('player-ship');
+    player.style.display = 'none';
+    
+    // After a delay, respawn the player at the center-bottom position
+    setTimeout(() => {
+      // Reset player position to center bottom (original spawn point)
+      const container = document.getElementById('game-container');
+      const playerWidth = player.offsetWidth || 50;
+      
+      // Calculate center position (same as in spawnPlayer function)
+      const containerWidth = container.clientWidth;
+      
+      // Reset playerX to center the ship horizontally
+      playerX = (containerWidth / 2) - (playerWidth / 2);
+      // Reset playerY to a suitable height from the bottom
+      playerY = 20;
+      
+      // Apply the new position
+      player.style.left = `${playerX}px`;
+      player.style.bottom = `${playerY}px`;
+      
+      // Make the player visible again
+      player.style.display = 'block';
+      
+      // Reset respawning flag
+      playerRespawning = false;
+    }, 1000); // 1 second delay before respawning
+  }
+}
+    
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateHUD();
+        if (timeLeft <= 0) endGame('time');
+      }, 1000);
+    }
+    
+    function accelerateEnemies() {
+      if (accelerationCount >= 4) return;
+      accelerationCount++;
+      enemyMoveSpeed = Math.max(50, enemyMoveSpeed - 30);
+      enemyShotSpeed += 1;
+      clearInterval(enemyMoveInterval);
+      enemyMoveInterval = setInterval(moveEnemies, enemyMoveSpeed);
+    }
+    
+    function endGame(reason) {
+  gameEnded = true;
+
+  if (!backgroundMusic.paused) {
+    backgroundMusic.pause();
+    backgroundMusic.currentTime = 0;
+  }
+
+  clearInterval(enemyMoveInterval);
+  clearInterval(enemyFireInterval);
+  clearInterval(timerInterval);
+  clearInterval(accelerationInterval);
+
+  const overlay = document.getElementById('end-game-overlay');
+
+  overlay.classList.add('visible');
+  overlay.style.display = 'flex';
+
+  const title = document.getElementById('end-title');
+  const finalScore = document.getElementById('final-score');
+
+  finalScore.textContent = score;
+
+  if (reason === 'lost') {
+    title.textContent = 'You Lost!';
+    soundLose.play();
+  } else if (reason === 'time') {
+    if (score >= 100) {
+      title.textContent = 'Winner!';
+      soundVictory.play();
+    } else {
+      title.textContent = 'You can do better';
+      soundLose.play();
+    }
+  } else {
+    title.textContent = 'Victory!';
+    soundVictory.play();
+  }
+
+  // Calculate elapsed time (original time - remaining time)
+  const originalTime = parseInt(document.getElementById('game-time').value || 2) * 60;
+  const elapsedTime = originalTime - timeLeft;
+  
+  // Save both score and time to history
+  if (currentUser && currentUser.username) {
+    if (!scoreHistory[currentUser.username]) scoreHistory[currentUser.username] = [];
+    // Store an object with both score and time
+    scoreHistory[currentUser.username].push({
+      score: score,
+      time: elapsedTime
+    });
+  }
+
+  document.addEventListener('keydown', restartListener);
+}
+
+
+
+    
+    function checkWin() {
+      if (enemies.length === 0) {
+        endGame('victory');
+      }
+    }
+    
+    function restartListener(e) {
+      if (e.key === ' ') {
+        document.removeEventListener('keydown', restartListener);
+        showScreen('score-screen');
+        renderScoreTable();
+      }
+    }
+    function renderScoreTable() {
+  const history = scoreHistory[currentUser.username] || [];
+  const container = document.getElementById('score-history');
+  container.innerHTML = "<h3>Your Scores</h3>";
+
+  if (history.length === 0) {
+    container.innerHTML += "<p>No scores yet!</p>";
+    return;
+  }
+
+  const table = document.createElement('table');
+  table.className = 'score-table';
+
+  const header = document.createElement('tr');
+  header.innerHTML = "<th>Rank</th><th>Score</th><th>Time</th>";
+  table.appendChild(header);
+
+  // Sort by score (highest first)
+  history.sort((a, b) => b.score - a.score).forEach((entry, index) => {
+    const row = document.createElement('tr');
+    
+    // Format time as MM:SS
+    const minutes = Math.floor(entry.time / 60);
+    const seconds = entry.time % 60;
+    const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    
+    row.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${entry.score}</td>
+      <td>${formattedTime}</td>
+    `;
+    table.appendChild(row);
+  });
+
+  container.appendChild(table);
+}
+    
+    // Keyboard movement
+// HANDLER אחד ויחיד ל-כל הקשות במקלדת
+document.addEventListener('keydown', function(e) {
+  // ביטול ברירת מחדל עבור Space ו-Arrow מקשים
+  const keysToPrevent = [' ', 'Spacebar', 'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+  
+  if (keysToPrevent.includes(e.key) || keysToPrevent.includes(e.code)) {
+    if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
+      e.preventDefault();
+    }
+  }
+
+  keysPressed[e.key] = true;
+
+  if (e.key === gameSettings.firingKey && !gamePaused && !gameEnded) {
+    firePlayerShot();
+}
+
+
+  if (gameEnded && (e.key === ' ' || e.code === 'Space')) {
+    document.removeEventListener('keydown', restartListener);
+    showScreen('score-screen');
+    renderScoreTable();
+  }
+
+  if (e.key === 'Escape') {
+    document.getElementById('about-dialog')?.close();
+  }
+});
+
+document.addEventListener('keyup', function(e) {
+  keysPressed[e.key] = false;
+});
+
+
+    
+    setInterval(() => {
+      if (!gameEnded) {
+        const step = 10;
+        if (keysPressed['ArrowLeft']) movePlayer(-step, 0);
+        if (keysPressed['ArrowRight']) movePlayer(step, 0);
+        if (keysPressed['ArrowUp']) movePlayer(0, step);
+        if (keysPressed['ArrowDown']) movePlayer(0, -step);
+      }
+    }, 30);
+    
+    function movePlayer(dx, dy) {
+      const player = document.getElementById('player-ship');
+      const container = document.getElementById('game-container');
+      const hudHeight = 40;
+
+      const containerWidth = container.clientWidth;
+      const containerHeight = container.clientHeight - hudHeight; // Adjust for HUD
+      const playerWidth = player.offsetWidth;
+      const playerHeight = player.offsetHeight;
+
+      // Horizontal constraints remain the same
+      playerX = Math.min(Math.max(playerX + dx, 30), containerWidth - playerWidth - 30);
+      
+      // Vertical constraints - limit to 40% of visible game area (excluding HUD)
+      const maxHeight = containerHeight * 0.4;
+      playerY = Math.min(Math.max(playerY + dy, 30), maxHeight);
+
+      player.style.left = `${playerX}px`;
+      player.style.bottom = `${playerY}px`;
+    }
+    
+    
+      </script>
+    
+    </body>
+    </html>
