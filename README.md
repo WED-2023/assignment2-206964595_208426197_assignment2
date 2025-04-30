@@ -8,11 +8,10 @@ Website -  https://wed-2023.github.io/assignment2-206964595_208426197_assignment
 
 
 
-A modern web-based implementation of the classic Space Invaders arcade game with enhanced features and customization options.
 
 ## Overview
 
-This project is a web-based Space Invaders game created using HTML, CSS, and vanilla JavaScript. The game features classic Space Invaders gameplay with modern enhancements including user accounts, customizable controls, different ship styles, and various gameplay features.
+This project is a web-based Space Invaders game created using HTML, CSS, and JS. The game features classic Space Invaders gameplay with modern enhancements including user accounts, customizable controls, different ship styles, and various gameplay features.
 
 ## Features
 
