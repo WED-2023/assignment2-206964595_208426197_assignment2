@@ -1,7 +1,9 @@
 # Space Invaders Game
 ## creators
 Yuval Ellins - 206964595 
+
 Idan Duhaviv - 208426197
+
 Website -  https://wed-2023.github.io/assignment2-206964595_208426197_assignment2/
 
 
